@@ -3,14 +3,12 @@ import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { useState } from "react"
 
-export const HomePage = () => {
-    const [name, setName] = useState("")
+export const LoginPage = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [nickname, setNickname] = useState("")
     const handleSubmit = event => {
         event.preventDefault()
-        console.log({ name, email, password, nickname })
+        console.log({ email, password })
     }
     return (
         <main className="bg-[url('./fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
@@ -23,18 +21,11 @@ export const HomePage = () => {
                             Vamos começar!
                         </h2>
 
-                        <h1>Informe logo abaixo quem você é para podemos iniciar o quiz sobre a cidade de Araraquara.</h1>
+                        <h1>Informe logo abaixo o seu Login!</h1>
                     </article>
 
                     <form className="w-full max-w-xs mx-auto" onSubmit={handleSubmit}>
-                        <TextField
-                            label="Digite seu nome completo"
-                            id="name"
-                            name="name"
-                            type="text"
-                            value={name}
-                            onChange={event => setName(event.target.value)}
-                        />
+                       
                         <TextField
                             label="Digite seu email"
                             id="email"
@@ -51,21 +42,12 @@ export const HomePage = () => {
                             value={password}
                             onChange={event => setPassword(event.target.value)}
                         />
-                        <TextField
-                            label="Digite seu apelido"
-                            id="nickname"
-                            name="nickname"
-                            type="text"
-                            value={nickname}
-                            onChange={event => setNickname(event.target.value)}
-                        />
-                        <Button type="submit">Criar conta</Button>
-
-
+                       
+                        <Button>Acessar</Button>
                         <p className="text-center my-3">ou</p>
 
-                        <Link to="/login">
-                            <Button type="button">Já tenho cadastro</Button>
+                        <Link to="/">
+                            <Button type="button">Cadastre-se</Button>
                         </Link>
                     </form>
                 </section>
