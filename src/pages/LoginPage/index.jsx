@@ -2,13 +2,33 @@ import { Link } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { useState } from "react"
+import axios from "axios";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const handleSubmit = event => {
+
+    const handleSubmit = async event => {
         event.preventDefault()
-        console.log({ email, password })
+        
+        try {
+            const payload = {
+                email,
+                password
+            }
+
+            const response = await axios.post("/auth/login",
+                payload,
+                {
+                    baseURL: import.meta.env.VITE_API_URL
+                }
+            )
+
+            console.log({ response })
+        } catch (error) {
+            console.error({ handleSubmit: error })
+        }
+
     }
     return (
         <main className="bg-[url('./fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
@@ -25,7 +45,7 @@ export const LoginPage = () => {
                     </article>
 
                     <form className="w-full max-w-xs mx-auto" onSubmit={handleSubmit}>
-                       
+
                         <TextField
                             label="Digite seu email"
                             id="email"
@@ -42,8 +62,8 @@ export const LoginPage = () => {
                             value={password}
                             onChange={event => setPassword(event.target.value)}
                         />
-                       
-                        <Button>Acessar</Button>
+
+                        <Button type="submit">Acessar</Button>
                         <p className="text-center my-3">ou</p>
 
                         <Link to="/">
