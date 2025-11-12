@@ -1,3 +1,4 @@
+import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 
 export const HomePage = () => {
@@ -15,7 +16,7 @@ export const HomePage = () => {
                         <h1>Informe logo abaixo quem você é para podemos iniciar o quiz sobre a cidade de Araraquara.</h1>
                     </article>
 
-                    <form>
+                    <form className="w-full max-w-xs mx-auto">
                         <TextField
                             label="Digite seu nome completo"
                             id="name"
@@ -40,7 +41,7 @@ export const HomePage = () => {
                             name="nickname"
                             type="text"
                         />
-
+                        <Button >Criar conta</Button>
                     </form>
                 </section>
             </div>
