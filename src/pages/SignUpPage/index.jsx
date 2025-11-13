@@ -3,7 +3,7 @@ import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { useState } from "react"
 
-export const HomePage = () => {
+export const SignUpPage = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -14,7 +14,7 @@ export const HomePage = () => {
     }
     return (
         <main className="bg-[url('./fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
-            <div className="w-full max-w-2xl bg-neutral-50 p-8 rounded-lg">
+            <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg">
 
                 <section className="p-6 bg-green-200 rounded-lg">
                     <article className="text-center">
@@ -64,7 +64,7 @@ export const HomePage = () => {
 
                         <p className="text-center my-3">ou</p>
 
-                        <Link to="/login">
+                        <Link to="/">
                             <Button type="button">Já tenho cadastro</Button>
                         </Link>
                     </form>

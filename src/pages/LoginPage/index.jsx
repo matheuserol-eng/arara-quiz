@@ -32,7 +32,7 @@ export const LoginPage = () => {
     }
     return (
         <main className="bg-[url('./fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
-            <div className="w-full max-w-2xl bg-neutral-50 p-8 rounded-lg">
+            <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg">
 
                 <section className="p-6 bg-green-200 rounded-lg">
                     <article className="text-center">
@@ -66,7 +66,7 @@ export const LoginPage = () => {
                         <Button type="submit">Acessar</Button>
                         <p className="text-center my-3">ou</p>
 
-                        <Link to="/">
+                        <Link to="/cadastro">
                             <Button type="button">Cadastre-se</Button>
                         </Link>
                     </form>
