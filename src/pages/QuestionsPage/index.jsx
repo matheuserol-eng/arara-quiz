@@ -104,11 +104,12 @@ export const QuestionsPage = () => {
 
     return (
         <div className="bg-[url('./araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
-
+         <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg">
             <main className="container mx-auto px-4 py-8">
                 <div className="max-w-2xl mx-auto space-y-6">
+                   
                     <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm text-neutral-50">
+                        <div className="flex items-center justify-between text-sm text-stone-800">
                             {/* <span>{theme.title}</span> */}
                             <span>{question.theme.name}</span>
                             <span>
@@ -185,8 +186,9 @@ export const QuestionsPage = () => {
                         </div>
                     </div>
                 </div>
+                
             </main>
         </div>
-
+</div>
     );
 }
