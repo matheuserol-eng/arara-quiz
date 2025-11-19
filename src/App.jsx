@@ -3,6 +3,8 @@ import { SignUpPage } from "./pages/SignUpPage";
 import { LoginPage } from "./pages/loginpage";
 import { ThemesPage } from "./pages/ThemesPage";
 import { QuestionsPage } from "./pages/QuestionsPage";
+import { ResultsPage } from "./pages/ResultsPage";
+import { RankingPage } from "./pages/RankingPage";
 
 const App = () => {
   return (
@@ -11,6 +13,8 @@ const App = () => {
       <Route path="/cadastro" element={<SignUpPage />} />
       <Route path="/temas" element={<ThemesPage />} />
       <Route path="/questoes" element={<QuestionsPage />} />
+      <Route path="/resultados" element={<ResultsPage />} />
+      <Route path="/ranking" element={<RankingPage />} />
     </Routes> 
   );
 }
