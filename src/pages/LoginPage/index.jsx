@@ -1,16 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { useState } from "react"
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const LoginPage = () => {
+    const navigate = useNavigate()
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const handleSubmit = async event => {
         event.preventDefault()
-        
+
         try {
             const payload = {
                 email,
@@ -24,9 +27,15 @@ export const LoginPage = () => {
                 }
             )
 
-            console.log({ response })
+            const token = response.data.accessToken
+
+            localStorage.setItem("@arara-quiz/token", token)
+
+            navigate("/temas")
         } catch (error) {
             console.error({ handleSubmit: error })
+
+            toast.error("Ocorreu um erro! Tente novamente em instantes")
         }
 
     }

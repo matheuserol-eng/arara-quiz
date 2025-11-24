@@ -1,17 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { useState } from "react"
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const SignUpPage = () => {
+    const navigate = useNavigate()
+
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [nickname, setNickname] = useState("")
-    const handleSubmit = event => {
+
+    const handleSubmit = async event => {
         event.preventDefault()
-        console.log({ name, email, password, nickname })
+
+        try {
+            const payload = { name, email, password, nickname }
+
+            const response = await axios.post("/auth/register",
+                payload,
+                {
+                    baseURL: import.meta.env.VITE_API_URL
+                }
+            )
+
+            toast.success("Usuário cadastrado com sucesso")
+
+            navigate("/")
+        } catch (error) {
+            console.error({ handleSubmit: error })
+
+            toast.error("Ocorreu um erro! Tente novamente em instantes")
+
+        }
     }
+
     return (
         <main className="bg-[url('./fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
             <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg">
