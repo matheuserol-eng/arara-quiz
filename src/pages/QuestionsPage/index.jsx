@@ -1,90 +1,78 @@
+import axios from "axios";
 import { XCircle } from "lucide-react"
 import { CheckCircle2 } from "lucide-react"
-import { useState } from "react"
-
-const QUESTIONS = [
-    {
-        id: 1,
-        question: "Em que ano foi inaugurado o Museu Ferroviário de Araraquara?",
-        alternatives: ["1950", "1968", "1975", "1982"],
-        correctAnswer: 1,
-        theme: { name: "Museu ferroviário" },
-        points: 10,
-        explanation: "O Museu Ferroviário foi inaugurado em 1968, preservando a memória da ferrovia na região.",
-    },
-    {
-        id: 2,
-        question: "Qual ferrovia foi fundamental para o desenvolvimento de Araraquara?",
-        alternatives: [
-            "Estrada de Ferro Sorocabana",
-            "Estrada de Ferro Paulista",
-            "Estrada de Ferro Araraquarense",
-            "Estrada de Ferro Santos-Jundiaí",
-        ],
-        correctAnswer: 2,
-        theme: { name: "Museu ferroviário" },
-        points: 20,
-        explanation: "A Estrada de Ferro Araraquarense foi crucial para o desenvolvimento econômico da cidade.",
-    },
-    {
-        id: 3,
-        question: "O que o museu preserva principalmente?",
-        alternatives: ["Locomotivas antigas", "Documentos históricos", "Uniformes ferroviários", "Todas as alternativas"],
-        correctAnswer: 3,
-        theme: { name: "Museu ferroviário" },
-        points: 30,
-        explanation:
-            "O museu preserva locomotivas, documentos, uniformes e diversos objetos relacionados à história ferroviária.",
-    }
-]
+import { useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router-dom";
 
 export const QuestionsPage = () => {
+    const { id: themeId } = useParams();
+    const navigate = useNavigate();
+
+    const [questions, setQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0)
     const [selectedAnswer, setSelectedAnswer] = useState(null)
     const [showFeedback, setShowFeedback] = useState(false)
     const [isCorrect, setIsCorrect] = useState(false)
     const [quizComplete, setQuizComplete] = useState(false)
     const [totalPoints, setTotalPoints] = useState(0)
+    const [loading, setLoading] = useState(true)
 
-    const question = QUESTIONS[currentQuestion]
-    const progress = ((currentQuestion + 1) / QUESTIONS.length) * 100
+    useEffect(() => {
+        if (themeId) {
+            axios.get(`/questions/${themeId}`,
+                {
+                    baseURL: import.meta.env.VITE_API_URL
+                }
+            ).then(response => {
+                setQuestions(response.data);
+                setLoading(false);
+            }).catch(error => {
+                console.error("Erro ao buscar questões:", error);
+                setLoading(false); 
+            });
+        }
+    }, [themeId]);
 
+    const question = questions[currentQuestion]
+    const progress = questions.length > 0 ? ((currentQuestion + 1) / questions.length) * 100 : 0;
 
     const handleAnswerSelect = (answerIndex) => {
         if (showFeedback) return
-
 
         setSelectedAnswer(answerIndex)
     }
 
     const handleSubmitAnswer = () => {
-        const correct = selectedAnswer === question.correctAnswer
+        if (!question || selectedAnswer === null) return; 
 
-        console.log({ selectedAnswer, correctAnswer: question.correctAnswer })
+        const correct = selectedAnswer === question.correctAnswer
 
         setIsCorrect(correct)
         setShowFeedback(true)
 
         if (correct) {
-            const points = question.points
-            setTotalPoints(totalPoints + points)
+            const points = question.score
+            setTotalPoints(prevPoints => prevPoints + points)
         }
     }
 
     const handleNextQuestion = () => {
-        if (currentQuestion < QUESTIONS.length - 1) {
+        if (currentQuestion < questions.length - 1) {
             setCurrentQuestion(currentQuestion + 1)
             setSelectedAnswer(null)
             setShowFeedback(false)
             setIsCorrect(false)
         } else {
             setQuizComplete(true)
+            navigate('/resultados', { state: { totalPoints, themeId } }); 
         }
     }
 
     const getButtonClassName = (index) => {
+        if (!question) return ""; 
+
         const isSelected = selectedAnswer === index
-        const isCorrectAnswer = index === question.answer
+        const isCorrectAnswer = index === question.correctAnswer
 
         let baseClasses = "w-full text-left p-4 rounded-lg border-2 transition-all"
 
@@ -106,6 +94,15 @@ export const QuestionsPage = () => {
         return `${baseClasses} border hover:border-purple-500/50`
     }
 
+    if (loading) {
+        return <p className="text-xl text-center p-8">Carregando Questões...</p>;
+    }
+    
+    if (!questions || questions.length === 0) {
+        return <p className="text-xl text-center p-8">Nenhuma questão encontrada para este tema.</p>;
+    }
+
+  
     return (
         <div className="bg-[url('/araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
             <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg border">
@@ -114,20 +111,20 @@ export const QuestionsPage = () => {
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between text-sm text-stone-800">
-                                {/* <span>{theme.title}</span> */}
                                 <span>{question.theme.name}</span>
                                 <span>
-                                    Questão {currentQuestion + 1} de {QUESTIONS.length}
+                                    Questão {currentQuestion + 1} de {questions.length}
                                 </span>
                             </div>
-                            {/* <Progress value={progress} className="h-2" /> */}
+                            {/* Adicionar um progress bar aqui se desejar, usando a variável 'progress' */}
+                            {/* <Progress value={progress} className="h-2" /> */} 
                         </div>
 
                         <div>
                             <header>
                                 <h3 className="text-xl text-balance">{question.question}</h3>
                                 <p className="text-base font-medium text-purple-500">
-                                    Vale {question.points} pontos
+                                    Vale {question.score} pontos
                                 </p>
                             </header>
 
@@ -143,11 +140,12 @@ export const QuestionsPage = () => {
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span>{option}</span>
-                                                {showFeedback && index === question.answer && (
-                                                    <CheckCircle2 className="h-5 w-5 text-green-600" /> //borda verde
+                                                {/* Correção na condição de renderização dos ícones: question.correctAnswer */}
+                                                {showFeedback && index === question.correctAnswer && (
+                                                    <CheckCircle2 className="h-5 w-5 text-green-600" /> 
                                                 )}
-                                                {showFeedback && selectedAnswer === index && index !== question.answer && (
-                                                    <XCircle className="h-5 w-5 text-red-600" /> //borda vermelha
+                                                {showFeedback && selectedAnswer === index && index !== question.correctAnswer && (
+                                                    <XCircle className="h-5 w-5 text-red-600" /> 
                                                 )}
                                             </div>
                                         </button>
@@ -157,8 +155,8 @@ export const QuestionsPage = () => {
                                 {showFeedback && (
                                     <div
                                         className={`p-4 rounded-lg ${isCorrect
-                                            ? "bg-green-50 dark:bg-green-950 border border-green-200" //resposta certa
-                                            : "bg-red-50 dark:bg-red-950 border border-red-200" //resposta errada
+                                            ? "bg-green-50 dark:bg-green-950 border border-green-200"
+                                            : "bg-red-50 dark:bg-red-950 border border-red-200"
                                             }`}
                                     >
                                         <div className="flex items-center justify-center gap-2 mb-2 bg-neutral-50 max-w-fit px-3 rounded-3xl">
@@ -170,7 +168,7 @@ export const QuestionsPage = () => {
                                             <div>
                                                 <p className="font-semibold">{isCorrect ? "Correto!" : "Incorreto"}</p>
                                                 {isCorrect && (
-                                                    <p className="text-sm text-green-700">+{question.points} pontos</p>
+                                                    <p className="text-sm text-green-700">+{question.score} pontos</p>
                                                 )}
                                             </div>
                                         </div>
@@ -181,12 +179,17 @@ export const QuestionsPage = () => {
                                 <div className="w-full flex items-center justify-center">
 
                                     {!showFeedback ? (
-                                        <button onClick={handleSubmitAnswer} disabled={selectedAnswer === null} className="w-44 rounded-4xl cursor-pointer justify-center bg-sky-300 mx-auto px-4 py-2 border items-center">
+                                        <button 
+                                            onClick={handleSubmitAnswer} 
+                                            disabled={selectedAnswer === null} 
+                                            className={`w-44 rounded-4xl cursor-pointer justify-center mx-auto px-4 py-2 border items-center 
+                                                ${selectedAnswer === null ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-sky-300'}`}
+                                        >
                                             Confirmar Resposta
                                         </button>
                                     ) : (
-                                        <button onClick={handleNextQuestion} className="w-44 rounded-4xl cursor-pointer justify-center bg-sky-300 mx-auto px-4 py-2  border items-center">
-                                            {currentQuestion < QUESTIONS.length - 1 ? "Próxima Questão" : "Ver Resultado"}
+                                        <button onClick={handleNextQuestion} className="w-44 rounded-4xl cursor-pointer justify-center bg-sky-300 mx-auto px-4 py-2  border items-center">
+                                            {currentQuestion < questions.length - 1 ? "Próxima Questão" : "Ver Resultado"}
                                         </button>
                                     )}
                                 </div>
