@@ -67,7 +67,7 @@ export const ThemesPage = () => {
 
     return (
         <main className="bg-[url('/matriz.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
-            <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg">
+            <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg border">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold text-slate-800 mb-8">Escolha um tema!</h2>
 
