@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom";
 
 export const QuestionsPage = () => {
+    const token = localStorage.getItem("@arara-quiz/token")
     const { id: themeId } = useParams();
     const navigate = useNavigate();
 
@@ -42,10 +43,17 @@ export const QuestionsPage = () => {
         setSelectedAnswer(answerIndex)
     }
 
-    const handleSubmitAnswer = () => {
+    const handleSubmitAnswer = async () => {
         if (!question || selectedAnswer === null) return; 
 
         const correct = selectedAnswer === question.correctAnswer
+
+        await axios.post("/answers", {questionId: question.id, answer: selectedAnswer}, {
+            baseURL: import.meta.env.VITE_API_URL,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
 
         setIsCorrect(correct)
         setShowFeedback(true)
@@ -64,7 +72,7 @@ export const QuestionsPage = () => {
             setIsCorrect(false)
         } else {
             setQuizComplete(true)
-            navigate('/resultados', { state: { totalPoints, themeId } }); 
+            navigate(`/resultados/${themeId}`); 
         }
     }
 

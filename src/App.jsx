@@ -17,7 +17,7 @@ const App = () => {
         <Route path="/cadastro" element={<SignUpPage />} />
         <Route path="/temas" element={<ThemesPage />} />
         <Route path="/temas/:id/questoes" element={<QuestionsPage />} />
-        <Route path="/resultados" element={<ResultsPage />} />
+        <Route path="/resultados/:id" element={<ResultsPage />} />
         <Route path="/ranking" element={<RankingPage />} />
 
       </Routes>
