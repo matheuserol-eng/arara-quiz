@@ -19,6 +19,13 @@ export const ResultsPage = () => {
         }).then(response => {
             setPoints(response.data.totalScore)
         }).catch(error => console.error({ getScoreByTheme: error }))
+
+        axios.get(`/results/`, {
+            baseURL: import.meta.env.VITE_API_URL,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).catch(error => console.error({ getScoreByTheme: error }))
     }, [])
 
     return (
