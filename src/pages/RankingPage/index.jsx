@@ -26,7 +26,7 @@ export const RankingPage = () => {
     },[])
 
     return (
-        <main className="bg-[url('./araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
+        <main className="bg-[url('/araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
             <div className="w-full max-w-2xl bg-amber-500 p-8 rounded-lg opacity-60">
                 <div className="flex justify-center items-center mb-12 space-x-8">
                     <section className="flex items-center justify-center">
