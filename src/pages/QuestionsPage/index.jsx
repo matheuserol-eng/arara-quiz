@@ -112,7 +112,7 @@ export const QuestionsPage = () => {
 
   
     return (
-        <div className="bg-[url('/araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
+        <div className="bg-[url('https://arara-quiz.vercel.app/araraquaraantiga.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
             <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg border">
                 <main className="container mx-auto px-4 py-8">
                     <div className="max-w-2xl mx-auto space-y-6">

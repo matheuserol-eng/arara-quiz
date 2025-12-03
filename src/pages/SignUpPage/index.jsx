@@ -38,7 +38,7 @@ export const SignUpPage = () => {
     }
 
     return (
-        <main className="bg-[url('/fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
+        <main className="bg-[url('https://arara-quiz.vercel.app/fundo-arq.png')] min-h-screen bg-center bg-no-repeat flex items-center justify-center">
             <div className="w-full max-w-2xl bg-yellow-100 p-8 rounded-lg border">
 
                 <section className="p-6 bg-green-200 rounded-lg">
